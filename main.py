@@ -148,7 +148,11 @@ def run_game(words: list[str] | None = None, max_lives: int = 6) -> None:
             print(f"Wrong: {(' '.join(wrong)) if wrong else '(none)'}")
             print(f"Lives: {lives}")
 
-            guess = input("Guess a letter: ")
+            try:
+                guess = input("Guess a letter: ")
+            except (EOFError, KeyboardInterrupt):
+                print("\nGoodbye.")
+                return
             try:
                 guessed, lives = update_game_state(secret, guessed, guess, lives)
             except ValueError as exc:
@@ -160,7 +164,11 @@ def run_game(words: list[str] | None = None, max_lives: int = 6) -> None:
         else:
             print(f"You lost! The word was: {secret}")
 
-        play_again = input("Play again? (y/n): ").strip().lower()
+        try:
+            play_again = input("Play again? (y/n): ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye.")
+            return
 
 
 if __name__ == "__main__":

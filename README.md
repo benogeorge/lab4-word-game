@@ -8,7 +8,7 @@ Console word guessing game (Hangman-like) for the AI4SE course.
 .\run.ps1
 ```
 
-Or, if `python` works on your machine:
+Or, if `python` works on your machine (and doesn’t open the Microsoft Store):
 
 ```powershell
 python .\main.py
@@ -26,4 +26,3 @@ python -m unittest tests.test_main
 - `MY_NOTES.md`: design notes (original thinking + Copilot suggestions).
 - `JOURNAL.md`: log of AI interactions.
 - `REPORT.md`: short report/reflection.
-
