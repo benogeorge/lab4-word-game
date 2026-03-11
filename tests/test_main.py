@@ -1,6 +1,6 @@
 import unittest
 
-from main import update_game_state
+from main import incorrect_letters, is_won, masked_word, pick_secret_word, update_game_state
 
 
 class TestUpdateGameState(unittest.TestCase):
@@ -38,6 +38,22 @@ class TestUpdateGameState(unittest.TestCase):
             update_game_state("apple", [], "1", 6)
 
 
+class TestHelpers(unittest.TestCase):
+    def test_pick_secret_word_normalizes(self) -> None:
+        w = pick_secret_word([" Apple "])
+        self.assertEqual(w, "apple")
+
+    def test_masked_word_shows_underscores_and_letters(self) -> None:
+        self.assertEqual(masked_word("apple", []), "_ _ _ _ _")
+        self.assertEqual(masked_word("apple", ["a", "e"]), "a _ _ _ e")
+
+    def test_is_won(self) -> None:
+        self.assertFalse(is_won("apple", ["a", "p"]))
+        self.assertTrue(is_won("apple", ["a", "p", "l", "e"]))
+
+    def test_incorrect_letters_unique(self) -> None:
+        self.assertEqual(incorrect_letters("apple", ["a", "z", "Z", "p"]), ["z"])
+
+
 if __name__ == "__main__":
     unittest.main()
-
