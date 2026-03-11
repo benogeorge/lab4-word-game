@@ -34,5 +34,48 @@
 - Off-by-one errors on lives remaining and end-of-game detection.
 
 ## CoPilot Suggestions
-- (To be filled after asking CoPilot in Ask mode.)
 
+
+
+**States**
+- `INIT`: choose word, reset counters, clear guesses.
+- `IN_PROGRESS`: accepting guesses.
+- `WON`: all unique letters in word guessed.
+- `LOST`: attempts exhausted.
+- Optional: `QUIT` or `INVALID_INPUT` as transient UI states.
+
+**Variables To Track**
+- `secret_word` (string)
+- `guessed_letters` (set of chars)
+- `wrong_letters` (set of chars)
+- `max_wrong` (int, e.g. 6)
+- `wrong_count` (int) or derive with `len(wrong_letters)`
+- `display_word` (derived each turn from `secret_word` + `guessed_letters`)
+- `status` (`INIT/IN_PROGRESS/WON/LOST`)
+- Optional:
+- `all_guesses_in_order` (list, for history/UI)
+- `score` / `round_number` if multi-round
+- `word_source` / difficulty metadata
+
+**Rules / Invariants**
+- Game starts in `IN_PROGRESS` with empty guess sets.
+- A guess is valid only if it is one alphabetic character (or a full-word guess if enabled).
+- Repeated guesses do not change attempts.
+- `guessed_letters ∩ wrong_letters = ∅`
+- `wrong_count = len(wrong_letters)` if derived.
+- `0 <= wrong_count <= max_wrong`
+- `WON` iff every unique letter in `secret_word` is in `guessed_letters`.
+- `LOST` iff `wrong_count == max_wrong` and not `WON`.
+- Once `WON` or `LOST`, game state is terminal until reset.
+
+**Common Bugs / Edge Cases**
+- Case mismatch (`A` vs `a`) causing false misses.
+- Not normalizing accented or non-ASCII letters consistently.
+- Counting repeated wrong guesses multiple times.
+- Revealing punctuation/spaces incorrectly for phrases.
+- Off-by-one loss bug (`>` vs `>=` on attempts).
+- Empty word or malformed dictionary entries.
+- State not reset between rounds (stale guessed letters).
+- Updating both `guessed_letters` and `wrong_letters` by mistake.
+- Full-word guess rules unclear (does wrong full-word consume 1 or all attempts?).
+- UI shows stale `display_word` after a guess.
