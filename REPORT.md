@@ -22,6 +22,18 @@ I used Python `unittest` to validate core functions before building out the full
 ## Student may pull examples from the JOURNAL.md to illustrate their experience, including specific interactions that were particularly helpful or challenging.
 ### Types of prompts that worked well
 “Review this function against these constraints (pure / no loops / immutable inputs)” and “suggest test cases for this function”.
+
+#### Prompts I Used
+- “I tried to run `main.py`, but Python isn’t available in this terminal environment. Give me step-by-step commands to (1) check if Python exists, (2) install it if missing, and (3) rerun the script.”
+- “Write a `run.ps1` that finds a local Python install, falls back to installing via `winget` if needed, then runs `main.py` with forwarded args.”
+- “I’m getting an error when running the game.”
+- “List the game state variables for a Hangman-style word game and the invariants I should maintain.”
+- “Suggest edge cases and common bugs for Hangman/word-guess games.”
+- “Review my function.”
+- “Propose a test plan.”
+- “Generate test cases.”
+- “After these changes, review the diff and call out any behavior changes or rule violations I might have introduced.”
+- “I updated the journal/report—suggest how to summarize what worked well vs what failed when prompting Copilot, with concrete examples.”
 ### Types of prompts that did not work well or failed
 Vague prompts like “finish the whole game” tended to produce code that didn’t match the lab constraints until I asked for a review against the requirements.
 
