@@ -1,6 +1,6 @@
 import unittest
 
-from main import incorrect_letters, is_won, masked_word, pick_secret_word, update_game_state
+from main import incorrect_letters, is_won, masked_word, next_auto_guess, pick_secret_word, update_game_state
 
 
 class TestUpdateGameState(unittest.TestCase):
@@ -53,6 +53,11 @@ class TestHelpers(unittest.TestCase):
 
     def test_incorrect_letters_unique(self) -> None:
         self.assertEqual(incorrect_letters("apple", ["a", "z", "Z", "p"]), ["z"])
+
+    def test_next_auto_guess_skips_guessed(self) -> None:
+        self.assertEqual(next_auto_guess([]), "e")
+        self.assertEqual(next_auto_guess(["e"]), "t")
+        self.assertEqual(next_auto_guess(["e", "t", "a", "o", "i", "n"]), "s")
 
 
 if __name__ == "__main__":

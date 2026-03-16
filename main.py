@@ -130,6 +130,31 @@ DEFAULT_WORDS: list[str] = [
 ]
 
 
+AUTO_GUESS_ORDER = "etaoinshrdlucmfwypvbgkjqxz"
+
+
+def next_auto_guess(guessed_letters: list[str]) -> str:
+    """
+    Pick the next letter for autoplay mode.
+
+    Uses a fixed frequency-ish ordering to stay deterministic (useful for demos/tests).
+    """
+
+    guess = _next_auto_guess_rec(AUTO_GUESS_ORDER, guessed_letters, 0)
+    if guess is None:
+        raise RuntimeError("no remaining letters to guess")
+    return guess
+
+
+def _next_auto_guess_rec(order: str, guessed_letters: list[str], index: int) -> str | None:
+    if index >= len(order):
+        return None
+    ch = order[index]
+    if _list_contains(guessed_letters, ch):
+        return _next_auto_guess_rec(order, guessed_letters, index + 1)
+    return ch
+
+
 def run_game(words: list[str] | None = None, max_lives: int = 6) -> None:
     words = DEFAULT_WORDS if words is None else words
     if max_lives <= 0:
@@ -137,6 +162,14 @@ def run_game(words: list[str] | None = None, max_lives: int = 6) -> None:
 
     play_again = "y"
     while play_again in ("y", "yes"):
+        try:
+            mode = input("Mode: manual or autoplay? (m/a): ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye.")
+            return
+
+        autoplay = mode in ("a", "auto", "autoplay")
+
         secret = pick_secret_word(words)
         guessed: list[str] = []
         lives = max_lives
@@ -148,11 +181,15 @@ def run_game(words: list[str] | None = None, max_lives: int = 6) -> None:
             print(f"Wrong: {(' '.join(wrong)) if wrong else '(none)'}")
             print(f"Lives: {lives}")
 
-            try:
-                guess = input("Guess a letter: ")
-            except (EOFError, KeyboardInterrupt):
-                print("\nGoodbye.")
-                return
+            if autoplay:
+                guess = next_auto_guess(guessed)
+                print(f"Auto guess: {guess}")
+            else:
+                try:
+                    guess = input("Guess a letter: ")
+                except (EOFError, KeyboardInterrupt):
+                    print("\nGoodbye.")
+                    return
             try:
                 guessed, lives = update_game_state(secret, guessed, guess, lives)
             except ValueError as exc:

@@ -14,6 +14,10 @@ Or, if `python` works on your machine (and doesn’t open the Microsoft Store):
 python .\main.py
 ```
 
+When prompted, choose:
+- `m` for manual play (you type guesses)
+- `a` for autoplay (the computer guesses letters)
+
 ## Run tests
 
 ```powershell
